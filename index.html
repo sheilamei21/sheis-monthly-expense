@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#f8e8ef">
+<title>Shei's Monthly Expense</title>
+
+<style>
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 20px;
+  background: #fff8fb;
+  color: #51434a;
+  font-family: Arial, sans-serif;
+}
+
+.container {
+  max-width: 1100px;
+  margin: auto;
+}
+
+header {
+  text-align: center;
+  padding: 25px 10px;
+}
+
+header h1 {
+  color: #c66d97;
+  margin-bottom: 8px;
+}
+
+header p {
+  color: #888;
+}
+
+.card {
+  background: white;
+  border-radius: 18px;
+  padding: 20px;
+  margin-bottom: 18px;
+  box-shadow: 0 4px 18px #eadce4;
+}
+
+.summary {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.summary .card {
+  margin: 0;
+  text-align: center;
+}
+
+.summary h3 {
+  font-size: 13px;
+  color: #999;
+}
+
+.amount {
+  font-size: 21px;
+  font-weight: bold;
+  color: #c66d97;
+  overflow-wrap: anywhere;
+}
+
+.green {
+  color: #62a88c;
+}
+
+.red {
+  color: #d67b83;
+}
+
+button {
+  border: none;
+  border-radius: 12px;
+  padding: 12px 16px;
+  cursor: pointer;
+  font-weight: bold;
+  background: #eec8da;
+  color: #694d5b;
+  margin: 3px;
+}
+
+button:hover {
+  opacity: .85;
+}
+
+input, select, textarea {
+  width: 100%;
+  padding: 12px;
+  margin: 6px 0 12px;
+  border: 1px solid #eadce4;
+  border-radius: 10px;
+  background: white;
+  font-size: 14px;
+}
+
+label {
+  font-size: 13px;
+  color: #888;
+}
+
+.category {
+  border: 1px solid #f0dce6;
+  border-radius: 14px;
+  margin: 12px 0;
+  overflow: hidden;
+}
+
+.category-header {
+  padding: 16px;
+  background: #fff0f6;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.subcategory {
+  padding: 15px;
+  border-top: 1px solid #f5e5ec;
+}
+
+.sub-name {
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+.substats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 5px;
+  font-size: 12px;
+  margin: 10px 0;
+}
+
+.substats div {
+  background: #fff8fb;
+  border-radius: 9px;
+  padding: 8px;
+  overflow-wrap: anywhere;
+}
+
+.substats strong {
+  display: block;
+  margin-top: 5px;
+}
+
+.entrybox {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.transaction {
+  border-bottom: 1px solid #f1e5eb;
+  padding: 12px 0;
+}
+
+.transaction:last-child {
+  border-bottom: none;
+}
+
+.tx-top {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.tx-note {
+  color: #999;
+  font-size: 12px;
+  margin-top: 5px;
+}
+
+.delete {
+  background: #f7e1e4;
+  color: #b96775;
+  font-size: 11px;
+  padding: 6px 10px;
+}
+
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.toolbar button {
+  flex: 1;
+}
+
+.section-title {
+  color: #c66d97;
+}
+
+.empty {
+  text-align: center;
+  color: #aaa;
+  padding: 20px;
+}
+
+@media(max-width:600px) {
+  body {
+    padding: 12px;
+  }
+
+  .summary {
+    grid-template-columns: 1fr;
+  }
+
+  .summary .card {
+    padding: 15px;
+  }
+
+  .amount {
+    font-size: 20px;
+  }
+
+  .substats {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+
+  .entrybox {
+    grid-template-columns: 1fr;
+  }
+}
+</style>
+</head>
+
+<body>
+<div class="container">
+
+<header>
+  <h1>🎀 Shei's Monthly Expense</h1>
+  <p>Small steps, big dreams. Stay consistent. 💗</p>
+</header>
+
+<div class="card">
+  <label>Select Month</label>
+  <input type="month" id="monthPicker">
+</div>
+
+<div class="summary">
+  <div class="card">
+    <h3>💰 Cash In</h3>
+    <div class="amount green" id="cashIn">Rp0</div>
+  </div>
+
+  <div class="card">
+    <h3>🛍️ Cash Out</h3>
+    <div class="amount red" id="cashOut">Rp0</div>
+  </div>
+
+  <div class="card">
+    <h3>🏦 Balance</h3>
+    <div class="amount" id="balance">Rp0</div>
+  </div>
+</div>
+
+<div class="card">
+  <h2 class="section-title">✨ Quick Entry</h2>
+
+  <label>Transaction Type</label>
+  <select id="type">
+    <option value="budget">💰 Budget Top Up (Cash In)</option>
+    <option value="expense">🛍️ Expense (Cash Out)</option>
+    <option value="income">💵 Other Income</option>
+  </select>
+
+  <label>Date</label>
+  <input type="date" id="date">
+
+  <label>Category</label>
+  <select id="category" onchange="updateSubcategories()"></select>
+
+  <label>Subcategory</label>
+  <select id="subcategory"></select>
+
+  <div class="entrybox">
+    <div>
+      <label>Amount (Rp)</label>
+      <input type="number" id="amount" min="1" placeholder="Amount">
+    </div>
+    <div>
+      <label>Payment Method</label>
+      <input type="text" id="via" placeholder="BCA / Seabank / Gopay">
+    </div>
+  </div>
+
+  <label>Note</label>
+  <input type="text" id="note" placeholder="Additional note">
+
+  <button onclick="saveEntry()" style="width:100%">
+    💗 Save Transaction
+  </button>
+</div>
+
+<div class="card">
+  <h2 class="section-title">💗 Category Budget</h2>
+  <div id="categories"></div>
+</div>
+
+<div class="card">
+  <h2 class="section-title">📖 Transaction History</h2>
+  <div id="transactions"></div>
+</div>
+
+<div class="card">
+  <h2 class="section-title">📊 Monthly Report</h2>
+  <div class="toolbar">
+    <button onclick="downloadCSV()">📥 Download Excel (CSV)</button>
+    <button onclick="printReport()">🖨️ Save PDF</button>
+  </div>
+</div>
+
+</div>
+
+<script>
+const CATEGORIES = [
+  {
+    name: "Shei’s Daily Ride 🚗",
+    icon: "🚗",
+    subs: [
+      ["Busway","E-Money"],
+      ["Parking Fee","E-Money"],
+      ["Ojek Online","Gopay"],
+      ["Hendra","Seabank"]
+    ]
+  },
+  {
+    name: "Aayen's Treats 😺🐾",
+    icon: "😺",
+    subs: [
+      ["makan aayen","Seabank"],
+      ["Vaksin","Seabank"]
+    ]
+  },
+  {
+    name: "Shei's Treats 🍴🍪",
+    icon: "🍴",
+    subs: [
+      ["Breakfast","Gopay"],
+      ["Lunch","Gopay"],
+      ["Weekend Spend","BCA"],
+      ["Meal Prep","Seabank"]
+    ]
+  },
+  {
+    name: "Bismillah Diganti Lebih 💰💸",
+    icon: "💰",
+    subs: [
+      ["Koperasi","Seabank"],
+      ["Mamah","Seabank"],
+      ["Bank","Seabank"],
+      ["Jago","Jago"],
+      ["Shopee","Seabank"],
+      ["Seabank","Seabank"]
+    ]
+  },
+  {
+    name: "Charity 🤍",
+    icon: "🤍",
+    subs: [
+      ["Subuh Charity (kitabisa.com","BCA"]
+    ]
+  },
+  {
+    name: "Shei's Care 🎀💗",
+    icon: "🎀",
+    subs: [
+      ["Outfit","Seabank"],
+      ["Hair Care","Seabank"],
+      ["Body Care","Seabank"],
+      ["Skin Care","Seabank"],
+      ["Treatment","Seabank"],
+      ["Anything","Seabank"]
+    ]
+  },
+  {
+    name: "Shei' Savings 🏦",
+    icon: "🏦",
+    subs: [
+      ["Monthly Allowance","BCA"]
+    ]
+  },
+  {
+    name: "Additional ✨",
+    icon: "✨",
+    subs: [
+      ["Additional","BCA"]
+    ]
+  },
+  {
+    name: "Internet 🌐",
+    icon: "🌐",
+    subs: [
+      ["Wifi","Seabank"],
+      ["Listrik","Seabank"],
+      ["Kuota","Seabank"]
+    ]
+  }
+];
+
+const STORAGE_KEY = "shei_monthly_expense_v1";
+
+let TX = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
+
+const today = new Date();
+const currentMonth =
+  today.getFullYear() + "-" +
+  String(today.getMonth()+1).padStart(2,"0");
+
+document.getElementById("monthPicker").value = currentMonth;
+document.getElementById("date").value =
+  today.toISOString().slice(0,10);
+
+function money(n) {
+  return "Rp" + Number(n || 0).toLocaleString("id-ID");
+}
+
+function saveStorage() {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(TX));
+}
+
+function selectedMonth() {
+  return document.getElementById("monthPicker").value;
+}
+
+function monthTransactions() {
+  return TX.filter(t => t.date && t.date.slice(0,7) === selectedMonth());
+}
+
+function populateCategories() {
+  const el = document.getElementById("category");
+  el.innerHTML = CATEGORIES.map((c,i) =>
+    `<option value="${i}">${c.icon} ${c.name}</option>`
+  ).join("");
+  updateSubcategories();
+}
+
+function updateSubcategories() {
+  const index = Number(document.getElementById("category").value || 0);
+  const cat = CATEGORIES[index];
+  const el = document.getElementById("subcategory");
+
+  el.innerHTML = cat.subs.map(s =>
+    `<option value="${escapeHTML(s[0])}">${escapeHTML(s[0])}</option>`
+  ).join("");
+}
+
+function escapeHTML(str) {
+  return String(str).replace(/[&<>"']/g, c => ({
+    "&":"&amp;",
+    "<":"&lt;",
+    ">":"&gt;",
+    '"':"&quot;",
+    "'":"&#39;"
+  }[c]));
+}
+
+function saveEntry() {
+  const type = document.getElementById("type").value;
+  const date = document.getElementById("date").value;
+  const catIndex = Number(document.getElementById("category").value);
+  const category = CATEGORIES[catIndex].name;
+  const subcategory = document.getElementById("subcategory").value;
+  const amount = Number(document.getElementById("amount").value);
+  const via = document.getElementById("via").value.trim();
+  const note = document.getElementById("note").value.trim();
+
+  if (!date || !subcategory || amount <= 0) {
+    alert("Please complete the date, subcategory, and amount.");
+    return;
+  }
+
+  TX.push({
+    id: Date.now(),
+    type,
+    date,
+    category,
+    subcategory,
+    amount,
+    via,
+    note
+  });
+
+  saveStorage();
+
+  document.getElementById("amount").value = "";
+  document.getElementById("note").value = "";
+
+  render();
+  alert("Transaction saved! 💗");
+}
+
+function deleteEntry(id) {
+  if (!confirm("Delete this transaction?")) return;
+
+  TX = TX.filter(t => t.id !== id);
+  saveStorage();
+  render();
+}
+
+function calculate() {
+  const data = monthTransactions();
+
+  const cashIn = data
+    .filter(t => t.type === "budget" || t.type === "income")
+    .reduce((s,t) => s + t.amount, 0);
+
+  const cashOut = data
+    .filter(t => t.type === "expense")
+    .reduce((s,t) => s + t.amount, 0);
+
+  return {cashIn, cashOut, balance: cashIn - cashOut};
+}
+
+function renderSummary() {
+  const s = calculate();
+
+  document.getElementById("cashIn").textContent = money(s.cashIn);
+  document.getElementById("cashOut").textContent = money(s.cashOut);
+  document.getElementById("balance").textContent = money(s.balance);
+
+  document.getElementById("balance").className =
+    "amount " + (s.balance < 0 ? "red" : "green");
+}
+
+function renderCategories() {
+  const data = monthTransactions();
+  const root = document.getElementById("categories");
+
+  root.innerHTML = CATEGORIES.map((cat,index) => {
+    const subs = cat.subs.map(([sub]) => {
+      const records = data.filter(t =>
+        t.category === cat.name && t.subcategory === sub
+      );
+
+      const cin = records
+        .filter(t => t.type === "budget")
+        .reduce((s,t) => s+t.amount,0);
+
+      const cout = records
+        .filter(t => t.type === "expense")
+        .reduce((s,t) => s+t.amount,0);
+
+      const bal = cin-cout;
+
+      return `
+      <div class="subcategory">
+        <div class="sub-name">${escapeHTML(sub)}</div>
+        <div class="substats">
+          <div>Cash In<strong class="green">${money(cin)}</strong></div>
+          <div>Cash Out<strong class="red">${money(cout)}</strong></div>
+          <div>Balance<strong class="${bal<0?"red":"green"}">${money(bal)}</strong></div>
+        </div>
+        <button onclick="quickEntry(${index},'${escapeHTML(sub)}','budget')">＋ Top Up</button>
+        <button onclick="quickEntry(${index},'${escapeHTML(sub)}','expense')">＋ Expense</button>
+      </div>`;
+    }).join("");
+
+    return `
+    <div class="category">
+      <div class="category-header" onclick="toggleCategory(${index})">
+        ${cat.icon} ${escapeHTML(cat.name)}　⌄
+      </div>
+      <div id="cat-${index}">
+        ${subs}
+      </div>
+    </div>`;
+  }).join("");
+}
+
+function toggleCategory(i) {
+  const el = document.getElementById("cat-"+i);
+  el.style.display = el.style.display === "none" ? "block" : "none";
+}
+
+function quickEntry(catIndex, sub, type) {
+  document.getElementById("type").value = type;
+  document.getElementById("category").value = catIndex;
+  updateSubcategories();
+  document.getElementById("subcategory").value = sub;
+  document.getElementById("date").value =
+    new Date().toISOString().slice(0,10);
+
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth"
+  });
+}
+
+function renderTransactions() {
+  const data = monthTransactions().slice().sort((a,b) =>
+    b.date.localeCompare(a.date) || b.id-a.id
+  );
+
+  const root = document.getElementById("transactions");
+
+  if (!data.length) {
+    root.innerHTML = `<div class="empty">No transactions this month yet 🌷</div>`;
+    return;
+  }
+
+  root.innerHTML = data.map(t => {
+    const label = t.type === "budget"
+      ? "💰 Budget Top Up"
+      : t.type === "income"
+      ? "💵 Income"
+      : "🛍️ Expense";
+
+    const color = t.type === "expense" ? "red" : "green";
+
+    return `
+    <div class="transaction">
+      <div class="tx-top">
+        <div>
+          <strong>${escapeHTML(t.subcategory)}</strong>
+          <div class="tx-note">
+            ${escapeHTML(t.category)} · ${escapeHTML(t.date)}
+          </div>
+        </div>
+      </div>
+      <div style="text-align:right">
+        <strong class="${color}">${t.type==="expense"?"-":"+"}${money(t.amount)}</strong>
+        <div>
+          <button class="delete" onclick="deleteEntry(${t.id})">Delete</button>
+        </div>
+      </div>
+    </div>
+    ${t.via ? `<div class="tx-note">Via: ${escapeHTML(t.via)}</div>` : ""}
+    ${t.note ? `<div class="tx-note">${escapeHTML(t.note)}</div>` : ""}
+    </div>`;
+  }).join("");
+}
+
+function render() {
+  renderSummary();
+  renderCategories();
+  renderTransactions();
+}
+
+function downloadCSV() {
+  const data = monthTransactions();
+
+  if (!data.length) {
+    alert("No transactions to export.");
+    return;
+  }
+
+  const rows = [
+    ["Date","Type","Category","Subcategory","Amount","Via","Note"],
+    ...data.map(t => [
+      t.date,
+      t.type,
+      t.category,
+      t.subcategory,
+      t.amount,
+      t.via || "",
+      t.note || ""
+    ])
+  ];
+
+  const csv = rows.map(row =>
+    row.map(v => `"${String(v).replace(/"/g,'""')}"`).join(",")
+  ).join("\n");
+
+  const blob = new Blob(
+    ["\uFEFF"+csv.join("\n")],
+    {type:"text/csv;charset=utf-8;"}
+  );
+
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "Shei_Expense_" + selectedMonth() + ".csv";
+  a.click();
+  URL.revokeObjectURL(a.href);
+}
+
+function printReport() {
+  const data = monthTransactions();
+  const s = calculate();
+
+  if (!data.length) {
+    alert("No transactions to print.");
+    return;
+  }
+
+  const win = window.open("", "_blank");
+
+  const rows = data.map(t => `
+    <tr>
+      <td>${escapeHTML(t.date)}</td>
+      <td>${escapeHTML(t.type)}</td>
+      <td>${escapeHTML(t.category)}</td>
+      <td>${escapeHTML(t.subcategory)}</td>
+      <td>${money(t.amount)}</td>
+      <td>${escapeHTML(t.via || "")}</td>
+      <td>${escapeHTML(t.note || "")}</td>
+    </tr>
+  `).join("");
+
+  win.document.write(`
+    <html>
+    <head>
+    <title>Shei Expense Report</title>
+    <style>
+      body{font-family:Arial;padding:20px;color:#555}
+      h1{color:#c66d97}
+      table{border-collapse:collapse;width:100%;font-size:11px}
+      th,td{border:1px solid #ddd;padding:8px;text-align:left}
+      th{background:#fff0f6}
+      .summary{display:flex;gap:20px;margin:20px 0}
+    </style>
+    </head>
+    <body>
+      <h1>🎀 Shei's Monthly Expense</h1>
+      <h2>${selectedMonth()}</h2>
+      <p>Cash In: ${money(s.cashIn)}</p>
+      <p>Cash Out: ${money(s.cashOut)}</p>
+      <p>Balance: ${money(s.balance)}</p>
+      <table>
+        <thead>
+          <tr>
+            <th>Date</th><th>Type</th><th>Category</th>
+            <th>Subcategory</th><th>Amount</th><th>Via</th><th>Note</th>
+          </tr>
+        </thead>
+        <tbody>${rows}</tbody>
+      </table>
+      <script>
+        window.onload=function(){window.print();}
+      <\/script>
+    </body>
+    </html>
+  `);
+
+  win.document.close();
+}
+
+document.getElementById("monthPicker")
+  .addEventListener("change",render);
+
+populateCategories();
+render();
+</script>
+</body>
+</html>
