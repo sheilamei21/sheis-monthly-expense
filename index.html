@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -18,9 +19,7 @@ body {
 }
 
 .container { max-width: 1100px; margin: auto; }
-
 header { text-align: center; padding: 25px 10px; }
-
 header h1 { color: #c66d97; margin-bottom: 8px; }
 header p { color: #888; }
 
@@ -39,6 +38,37 @@ header p { color: #888; }
 }
 
 .summary .card { margin: 0; text-align: center; }
+
+.bank-recap {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.bank-card {
+  background: #fff8fb;
+  border: 1px solid #f0dce6;
+  border-radius: 14px;
+  padding: 15px;
+}
+
+.bank-card h3 {
+  margin: 0 0 12px;
+  color: #c66d97;
+  text-align: center;
+}
+
+.bank-line {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 7px 0;
+  border-bottom: 1px solid #f1e5eb;
+  font-size: 13px;
+}
+
+.bank-line:last-child { border-bottom: none; }
+.bank-line strong { text-align: right; }
 
 .summary h3 { font-size: 13px; color: #999; }
 
@@ -151,9 +181,7 @@ label { font-size: 13px; color: #888; }
 }
 
 .toolbar button { flex: 1; }
-
 .section-title { color: #c66d97; }
-
 .empty { text-align: center; color: #aaa; padding: 20px; }
 
 @media(max-width:600px) {
@@ -163,6 +191,7 @@ label { font-size: 13px; color: #888; }
   .amount { font-size: 20px; }
   .substats { grid-template-columns: 1fr 1fr 1fr; }
   .entrybox { grid-template-columns: 1fr; }
+  .bank-recap { grid-template-columns: 1fr; }
 }
 </style>
 </head>
@@ -185,16 +214,19 @@ label { font-size: 13px; color: #888; }
     <h3>💰 Cash In</h3>
     <div class="amount green" id="cashIn">Rp0</div>
   </div>
-
   <div class="card">
     <h3>🛍️ Cash Out</h3>
     <div class="amount red" id="cashOut">Rp0</div>
   </div>
-
   <div class="card">
     <h3>🏦 Balance</h3>
     <div class="amount" id="balance">Rp0</div>
   </div>
+</div>
+
+<div class="card">
+  <h2 class="section-title">🏦 Cash Flow per Bank</h2>
+  <div class="bank-recap" id="bankRecap"></div>
 </div>
 
 <div class="card">
@@ -269,7 +301,8 @@ const CATEGORIES = [
       ["Busway","E-Money"],
       ["Parking Fee","E-Money"],
       ["Ojek Online","Gopay"],
-      ["Hendra","Seabank"]
+      ["Hendra","Seabank"],
+      ["Kereta","E-Money"]
     ]
   },
   {
@@ -296,10 +329,7 @@ const CATEGORIES = [
     subs: [
       ["Koperasi","Seabank"],
       ["Mamah","Seabank"],
-      ["Bank","Seabank"],
-      ["Jago","Jago"],
-      ["Shopee","Seabank"],
-      ["Seabank","Seabank"]
+      ["Bank","Seabank"]
     ]
   },
   {
@@ -325,7 +355,8 @@ const CATEGORIES = [
     name: "Shei' Savings 🏦",
     icon: "🏦",
     subs: [
-      ["Monthly Allowance","BCA"]
+      ["Monthly Allowance","BCA"],
+      ["Monthly Saving","BCA"]
     ]
   },
   {
@@ -569,8 +600,38 @@ function renderTransactions() {
   }).join("");
 }
 
+function renderBankRecap() {
+  const data = monthTransactions();
+  const banks = ["BCA", "Seabank", "Jago", "Gopay", "E-Money"];
+
+  document.getElementById("bankRecap").innerHTML = banks.map(bank => {
+    const records = data.filter(t =>
+      String(t.via || "").trim().toLowerCase() === bank.toLowerCase()
+    );
+
+    const cashIn = records
+      .filter(t => t.type === "budget" || t.type === "income")
+      .reduce((sum, t) => sum + Number(t.amount || 0), 0);
+
+    const cashOut = records
+      .filter(t => t.type === "expense")
+      .reduce((sum, t) => sum + Number(t.amount || 0), 0);
+
+    const balance = cashIn - cashOut;
+
+    return `
+      <div class="bank-card">
+        <h3>🏦 ${escapeHTML(bank)}</h3>
+        <div class="bank-line"><span>Cash In</span><strong class="green">${money(cashIn)}</strong></div>
+        <div class="bank-line"><span>Cash Out</span><strong class="red">${money(cashOut)}</strong></div>
+        <div class="bank-line"><span>Balance</span><strong class="${balance < 0 ? "red" : "green"}">${money(balance)}</strong></div>
+      </div>`;
+  }).join("");
+}
+
 function render() {
   renderSummary();
+  renderBankRecap();
   renderCategories();
   renderTransactions();
 }
@@ -595,7 +656,7 @@ function downloadCSV() {
     row.map(v => `"${String(v).replace(/"/g,'""')}"`).join(",")
   ).join("\n");
 
-  const blob = new Blob(["\uFEFF"+csv.join("\n")], {
+  const blob = new Blob(["\uFEFF"+csv], {
     type:"text/csv;charset=utf-8;"
   });
 
@@ -665,9 +726,7 @@ function printReport() {
   win.document.close();
 }
 
-/* ==========================
-   BACKUP DATA
-========================== */
+/* BACKUP DATA */
 function backupData() {
   if (!TX.length) {
     alert("There is no data to backup yet.");
@@ -699,9 +758,7 @@ function backupData() {
   alert("Backup downloaded successfully! 💗");
 }
 
-/* ==========================
-   RESTORE DATA
-========================== */
+/* RESTORE DATA */
 function restoreData() {
   document.getElementById("restoreFile").value = "";
   document.getElementById("restoreFile").click();
@@ -716,10 +773,8 @@ function processRestore(event) {
   reader.onload = function(e) {
     try {
       const parsed = JSON.parse(e.target.result);
-
       let imported;
 
-      // Support both backup format and raw transaction arrays
       if (Array.isArray(parsed)) {
         imported = parsed;
       } else if (
