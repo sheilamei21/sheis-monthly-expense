@@ -9,100 +9,187 @@
 
 <style>
 * { box-sizing: border-box; }
+
 body {
-  margin: 0; padding: 20px; background: #fff8fb;
-  color: #51434a; font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 20px;
+  background: #fff8fb;
+  color: #51434a;
+  font-family: Arial, sans-serif;
 }
+
 .container { max-width: 1100px; margin: auto; }
+
 header { text-align: center; padding: 25px 10px; }
+
 header h1 { color: #c66d97; margin-bottom: 8px; }
 header p { color: #888; }
+
 .card {
-  background: white; border-radius: 18px; padding: 20px;
-  margin-bottom: 18px; box-shadow: 0 4px 18px #eadce4;
+  background: white;
+  border-radius: 18px;
+  padding: 20px;
+  margin-bottom: 18px;
+  box-shadow: 0 4px 18px #eadce4;
 }
+
 .summary {
-  display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;
-}
-.summary .card { margin: 0; text-align: center; }
-.bank-recap {
-  display: grid; grid-template-columns: repeat(2, minmax(0, 1fr));
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
   gap: 12px;
 }
+
+.summary .card { margin: 0; text-align: center; }
+
+.bank-recap {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
 .bank-card {
-  background: #fff8fb; border: 1px solid #f0dce6;
-  border-radius: 14px; padding: 15px;
+  background: #fff8fb;
+  border: 1px solid #f0dce6;
+  border-radius: 14px;
+  padding: 15px;
 }
+
 .bank-card h3 {
-  margin: 0 0 12px; color: #c66d97; text-align: center;
+  margin: 0 0 12px;
+  color: #c66d97;
+  text-align: center;
 }
+
 .bank-line {
-  display: flex; justify-content: space-between; gap: 8px;
-  padding: 7px 0; border-bottom: 1px solid #f1e5eb;
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 7px 0;
+  border-bottom: 1px solid #f1e5eb;
   font-size: 13px;
 }
+
 .bank-line:last-child { border-bottom: none; }
 .bank-line strong { text-align: right; }
+
+@media(max-width:600px) {
+  .bank-recap { grid-template-columns: 1fr; }
+}
+
 .summary h3 { font-size: 13px; color: #999; }
+
 .amount {
-  font-size: 21px; font-weight: bold; color: #c66d97;
+  font-size: 21px;
+  font-weight: bold;
+  color: #c66d97;
   overflow-wrap: anywhere;
 }
+
 .green { color: #62a88c; }
 .red { color: #d67b83; }
+
 button {
-  border: none; border-radius: 12px; padding: 12px 16px;
-  cursor: pointer; font-weight: bold; background: #eec8da;
-  color: #694d5b; margin: 3px;
+  border: none;
+  border-radius: 12px;
+  padding: 12px 16px;
+  cursor: pointer;
+  font-weight: bold;
+  background: #eec8da;
+  color: #694d5b;
+  margin: 3px;
 }
+
 button:hover { opacity: .85; }
+
 input, select, textarea {
-  width: 100%; padding: 12px; margin: 6px 0 12px;
-  border: 1px solid #eadce4; border-radius: 10px;
-  background: white; font-size: 14px;
+  width: 100%;
+  padding: 12px;
+  margin: 6px 0 12px;
+  border: 1px solid #eadce4;
+  border-radius: 10px;
+  background: white;
+  font-size: 14px;
 }
+
 label { font-size: 13px; color: #888; }
+
 .category {
-  border: 1px solid #f0dce6; border-radius: 14px;
-  margin: 12px 0; overflow: hidden;
+  border: 1px solid #f0dce6;
+  border-radius: 14px;
+  margin: 12px 0;
+  overflow: hidden;
 }
+
 .category-header {
-  padding: 16px; background: #fff0f6;
-  font-weight: bold; cursor: pointer;
+  padding: 16px;
+  background: #fff0f6;
+  font-weight: bold;
+  cursor: pointer;
 }
+
 .subcategory {
-  padding: 15px; border-top: 1px solid #f5e5ec;
+  padding: 15px;
+  border-top: 1px solid #f5e5ec;
 }
+
 .sub-name { font-weight: bold; margin-bottom: 8px; }
+
 .substats {
-  display: grid; grid-template-columns: repeat(3, 1fr);
-  gap: 5px; font-size: 12px; margin: 10px 0;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 5px;
+  font-size: 12px;
+  margin: 10px 0;
 }
+
 .substats div {
-  background: #fff8fb; border-radius: 9px;
-  padding: 8px; overflow-wrap: anywhere;
+  background: #fff8fb;
+  border-radius: 9px;
+  padding: 8px;
+  overflow-wrap: anywhere;
 }
+
 .substats strong { display: block; margin-top: 5px; }
+
 .entrybox {
-  display: grid; grid-template-columns: 1fr 1fr; gap: 10px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
 }
+
 .transaction {
-  border-bottom: 1px solid #f1e5eb; padding: 12px 0;
+  border-bottom: 1px solid #f1e5eb;
+  padding: 12px 0;
 }
+
 .transaction:last-child { border-bottom: none; }
+
 .tx-top {
-  display: flex; justify-content: space-between; gap: 10px;
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
 }
+
 .tx-note { color: #999; font-size: 12px; margin-top: 5px; }
+
 .delete {
-  background: #f7e1e4; color: #b96775;
-  font-size: 11px; padding: 6px 10px;
+  background: #f7e1e4;
+  color: #b96775;
+  font-size: 11px;
+  padding: 6px 10px;
 }
+
 .toolbar {
-  display: flex; flex-wrap: wrap; align-items: center; gap: 8px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
 }
+
 .toolbar button { flex: 1; }
+
 .section-title { color: #c66d97; }
+
 .empty { text-align: center; color: #aaa; padding: 20px; }
 
 @media(max-width:600px) {
@@ -111,7 +198,7 @@ label { font-size: 13px; color: #888; }
   .summary .card { padding: 15px; }
   .amount { font-size: 20px; }
   .substats { grid-template-columns: 1fr 1fr 1fr; }
-  .entrybox, .bank-recap { grid-template-columns: 1fr; }
+  .entrybox { grid-template-columns: 1fr; }
 }
 </style>
 </head>
@@ -134,10 +221,12 @@ label { font-size: 13px; color: #888; }
     <h3>💰 Cash In</h3>
     <div class="amount green" id="cashIn">Rp0</div>
   </div>
+
   <div class="card">
     <h3>🛍️ Cash Out</h3>
     <div class="amount red" id="cashOut">Rp0</div>
   </div>
+
   <div class="card">
     <h3>🏦 Balance</h3>
     <div class="amount" id="balance">Rp0</div>
@@ -182,6 +271,7 @@ label { font-size: 13px; color: #888; }
         <option value="Jago">Jago</option>
         <option value="Gopay">Gopay</option>
         <option value="E-Money">E-Money</option>
+        <option value="BRI">BRI</option>
       </select>
     </div>
   </div>
@@ -212,6 +302,7 @@ label { font-size: 13px; color: #888; }
     <button onclick="backupData()">💾 Backup Data</button>
     <button onclick="restoreData()">📤 Restore Data</button>
   </div>
+
   <input type="file" id="restoreFile" accept=".json,application/json"
          style="display:none" onchange="processRestore(event)">
 </div>
@@ -255,7 +346,7 @@ const CATEGORIES = [
     subs: [
       ["Koperasi","Seabank"],
       ["Mamah","Seabank"],
-      ["Bank","Seabank"]
+      ["Bank","BRI"]
     ]
   },
   {
@@ -282,7 +373,7 @@ const CATEGORIES = [
     icon: "🏦",
     subs: [
       ["Monthly Allowance","BCA"],
-      ["Monthly Saving","BCA"]
+      ["Monthly Saving","BRI"]
     ]
   },
   {
@@ -386,6 +477,7 @@ function saveEntry() {
   });
 
   saveStorage();
+
   document.getElementById("amount").value = "";
   document.getElementById("note").value = "";
 
@@ -395,6 +487,7 @@ function saveEntry() {
 
 function deleteEntry(id) {
   if (!confirm("Delete this transaction?")) return;
+
   TX = TX.filter(t => t.id !== id);
   saveStorage();
   render();
@@ -405,20 +498,22 @@ function calculate() {
 
   const cashIn = data
     .filter(t => t.type === "budget" || t.type === "income")
-    .reduce((s,t) => s + Number(t.amount), 0);
+    .reduce((s,t) => s + t.amount, 0);
 
   const cashOut = data
     .filter(t => t.type === "expense")
-    .reduce((s,t) => s + Number(t.amount), 0);
+    .reduce((s,t) => s + t.amount, 0);
 
   return {cashIn, cashOut, balance: cashIn - cashOut};
 }
 
 function renderSummary() {
   const s = calculate();
+
   document.getElementById("cashIn").textContent = money(s.cashIn);
   document.getElementById("cashOut").textContent = money(s.cashOut);
   document.getElementById("balance").textContent = money(s.balance);
+
   document.getElementById("balance").className =
     "amount " + (s.balance < 0 ? "red" : "green");
 }
@@ -435,11 +530,11 @@ function renderCategories() {
 
       const cin = records
         .filter(t => t.type === "budget")
-        .reduce((s,t) => s + Number(t.amount),0);
+        .reduce((s,t) => s+t.amount,0);
 
       const cout = records
         .filter(t => t.type === "expense")
-        .reduce((s,t) => s + Number(t.amount),0);
+        .reduce((s,t) => s+t.amount,0);
 
       const bal = cin-cout;
 
@@ -461,7 +556,9 @@ function renderCategories() {
       <div class="category-header" onclick="toggleCategory(${index})">
         ${cat.icon} ${escapeHTML(cat.name)}　⌄
       </div>
-      <div id="cat-${index}">${subs}</div>
+      <div id="cat-${index}">
+        ${subs}
+      </div>
     </div>`;
   }).join("");
 }
@@ -478,6 +575,7 @@ function quickEntry(catIndex, sub, type) {
   document.getElementById("subcategory").value = sub;
   document.getElementById("date").value =
     new Date().toISOString().slice(0,10);
+
   window.scrollTo({top:0,behavior:"smooth"});
 }
 
@@ -505,22 +603,23 @@ function renderTransactions() {
             ${escapeHTML(t.category)} · ${escapeHTML(t.date)}
           </div>
         </div>
-        <div style="text-align:right">
-          <strong class="${color}">${t.type==="expense"?"-":"+"}${money(t.amount)}</strong>
-          <div>
-            <button class="delete" onclick="deleteEntry(${t.id})">Delete</button>
-          </div>
+      </div>
+      <div style="text-align:right">
+        <strong class="${color}">${t.type==="expense"?"-":"+"}${money(t.amount)}</strong>
+        <div>
+          <button class="delete" onclick="deleteEntry(${t.id})">Delete</button>
         </div>
       </div>
-      ${t.via ? `<div class="tx-note">Via: ${escapeHTML(t.via)}</div>` : ""}
-      ${t.note ? `<div class="tx-note">${escapeHTML(t.note)}</div>` : ""}
+    </div>
+    ${t.via ? `<div class="tx-note">Via: ${escapeHTML(t.via)}</div>` : ""}
+    ${t.note ? `<div class="tx-note">${escapeHTML(t.note)}</div>` : ""}
     </div>`;
   }).join("");
 }
 
 function renderBankRecap() {
   const data = monthTransactions();
-  const banks = ["BCA", "Seabank", "Jago", "Gopay", "E-Money"];
+  const banks = ["BCA", "Seabank", "Jago", "Gopay", "E-Money", "BRI"];
 
   document.getElementById("bankRecap").innerHTML = banks.map(bank => {
     const records = data.filter(t =>
@@ -529,11 +628,11 @@ function renderBankRecap() {
 
     const cashIn = records
       .filter(t => t.type === "budget" || t.type === "income")
-      .reduce((sum,t) => sum + Number(t.amount || 0), 0);
+      .reduce((sum, t) => sum + Number(t.amount || 0), 0);
 
     const cashOut = records
       .filter(t => t.type === "expense")
-      .reduce((sum,t) => sum + Number(t.amount || 0), 0);
+      .reduce((sum, t) => sum + Number(t.amount || 0), 0);
 
     const balance = cashIn - cashOut;
 
@@ -554,8 +653,10 @@ function render() {
   renderTransactions();
 }
 
+/* CSV EXPORT */
 function downloadCSV() {
   const data = monthTransactions();
+
   if (!data.length) {
     alert("No transactions to export.");
     return;
@@ -583,6 +684,7 @@ function downloadCSV() {
   URL.revokeObjectURL(a.href);
 }
 
+/* PRINT / PDF */
 function printReport() {
   const data = monthTransactions();
   const s = calculate();
@@ -641,6 +743,9 @@ function printReport() {
   win.document.close();
 }
 
+/* ==========================
+   BACKUP DATA
+========================== */
 function backupData() {
   if (!TX.length) {
     alert("There is no data to backup yet.");
@@ -668,9 +773,13 @@ function backupData() {
   a.click();
   a.remove();
   URL.revokeObjectURL(url);
+
   alert("Backup downloaded successfully! 💗");
 }
 
+/* ==========================
+   RESTORE DATA
+========================== */
 function restoreData() {
   document.getElementById("restoreFile").value = "";
   document.getElementById("restoreFile").click();
@@ -685,6 +794,7 @@ function processRestore(event) {
   reader.onload = function(e) {
     try {
       const parsed = JSON.parse(e.target.result);
+
       let imported;
 
       if (Array.isArray(parsed)) {
@@ -726,6 +836,7 @@ function processRestore(event) {
 
       saveStorage();
       render();
+
       alert("Restore successful! Your data has been restored. 💗");
 
     } catch(err) {
@@ -737,6 +848,7 @@ function processRestore(event) {
 }
 
 document.getElementById("monthPicker").addEventListener("change",render);
+
 populateCategories();
 render();
 </script>
